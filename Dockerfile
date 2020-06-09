@@ -1,56 +1,59 @@
 # PHPUnit Docker Container.
-FROM alpine:latest
+# with php7.1, xdebug, composer and phpunit 7.5
+
+FROM alpine:3.7
+    
 MAINTAINER Sergei Miami <miami@blackcrystal.net>
 
-RUN apk update && apk --no-cache add \
-	bash \
-	ca-certificates \
-	git \
-	curl \
-	unzip \
-	openssh-client \
-	rsync \
-	php7 \
-	php7-bcmath \
-	php7-ctype \
-	php7-curl \
-	php7-dom \
-	php7-exif \
-	php7-gd \
-	php7-json \
-	php7-mbstring \
-	php7-mcrypt \
-	php7-mysqlnd \
-	php7-opcache \
-	php7-openssl \
-	php7-pcntl \
-	php7-pdo \
-	php7-pdo_mysql \
-	php7-pdo_pgsql \
-	php7-pdo_sqlite \
-	php7-phar \
-	php7-session \
-	php7-simplexml \
-	php7-soap \
-	php7-tokenizer \
-	php7-xdebug \
-	php7-xml \
-	php7-xmlreader \
-	php7-xmlwriter \
-	php7-zip \
-	php7-zlib
+ADD https://repos.php.earth/alpine/phpearth.rsa.pub /etc/apk/keys/phpearth.rsa.pub
+RUN echo "https://repos.php.earth/alpine/v3.7" >> /etc/apk/repositories \
+	&& apk update && apk --no-cache add \
+		bash \
+		ca-certificates \
+		git \
+		curl \
+		unzip \
+		openssh-client \
+		rsync \
+		php7.1 \
+		php7.1-bcmath \
+		php7.1-ctype \
+		php7.1-curl \
+		php7.1-dom \
+		php7.1-exif \
+		php7.1-fileinfo \
+		php7.1-gd \
+		php7.1-json \
+		php7.1-mbstring \
+		php7.1-mcrypt \
+		php7.1-mysqlnd \
+		php7.1-opcache \
+		php7.1-openssl \
+		php7.1-pcntl \
+		php7.1-pdo \
+		php7.1-pdo_mysql \
+		php7.1-pdo_pgsql \
+		php7.1-pdo_sqlite \
+		php7.1-phar \
+		php7.1-session \
+		php7.1-simplexml \
+		php7.1-soap \
+		php7.1-tokenizer \
+		php7.1-xdebug \
+		php7.1-xml \
+		php7.1-xmlreader \
+		php7.1-xmlwriter \
+		php7.1-zip \
+		php7.1-zlib
 
 WORKDIR /tmp 
 	
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 	&& php composer-setup.php --install-dir=/usr/bin --filename=composer \
 	&& php -r "unlink('composer-setup.php');" \
-	&& composer require "phpunit/phpunit:~6.2.3" --prefer-source --no-interaction \
-	&& composer require "phpunit/php-invoker" --prefer-source --no-interaction \
+	&& composer require "phpunit/phpunit:^7" --prefer-source --no-interaction \
 	&& ln -s /tmp/vendor/bin/phpunit /usr/local/bin/phpunit \
-	# && sed -i 's/nn and/nn, Sergei Miami and/g' /tmp/vendor/phpunit/phpunit/src/Runner/Version.php \
-	# Enable X-Debug 
-	&& sed -i 's/\;z/z/g' /etc/php7/conf.d/xdebug.ini \
+	&& sed -i 's/\;z/z/g' /etc/php/7.1/conf.d/xdebug.ini \
 	&& php -m | grep -i xdebug
 
 VOLUME ["/app"]

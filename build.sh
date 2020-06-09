@@ -1,9 +1,16 @@
 #!/bin/bash
 
-docker build -t miami/phpunit .
-docker build -t miami/phpunit:latest .
-docker build -t miami/phpunit:6.2 .
-docker push miami/phpunit
-docker push miami/phpunit:latest
-docker push miami/phpunit:6.2
+read -p "Want to build miami/phpunit:7.5 ? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	docker build -t "miami/phpunit:7.5" .
+fi
+
+read -p "Want to publish miami/phpunit:7.5 ? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+	docker push "miami/phpunit:7.5"
+fi
 
