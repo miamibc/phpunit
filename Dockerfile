@@ -23,6 +23,7 @@ RUN echo "https://repos.php.earth/alpine/v3.7" >> /etc/apk/repositories \
 		php7.1-exif \
 		php7.1-fileinfo \
 		php7.1-gd \
+		php7.1-iconv \
 		php7.1-json \
 		php7.1-mbstring \
 		php7.1-mcrypt \
@@ -44,7 +45,11 @@ RUN echo "https://repos.php.earth/alpine/v3.7" >> /etc/apk/repositories \
 		php7.1-xmlreader \
 		php7.1-xmlwriter \
 		php7.1-zip \
-		php7.1-zlib
+		php7.1-zlib \
+		php7.1-pear php7.1-dev gcc musl-dev make \
+        libssh2-dev libssh2 \
+&& pecl install ssh2-1.2 \
+&& echo "extension=ssh2.so" >> /etc/php/7.1/php.ini
 
 WORKDIR /tmp 
 	
